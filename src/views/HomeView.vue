@@ -2,17 +2,25 @@
   <div class="home-container">
     <header class="header">
       <h1>Welcome, {{ authStore.currentUser?.name }}</h1>
-      <button @click="handleLogout" class="logout-button">Logout</button>
+      <div class="header-actions">
+        <router-link to="/truck-stops" class="nav-link">Truck Stops</router-link>
+        <button @click="handleLogout" class="logout-button">Logout</button>
+      </div>
     </header>
     <main class="main-content">
-      <h2>Dashboard</h2>
-      <div class="token-section">
-        <h3>Your Authentication Token:</h3>
-        <div class="token-display">
-          <code>{{ authStore.token }}</code>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Find Truck Stops</h3>
+          <p>Discover nearby truck stops with amenities like food, showers, and parking.</p>
+          <router-link to="/truck-stops" class="feature-link">View Map</router-link>
+        </div>
+        
+        <div class="feature-card">
+          <h3>Share Your Experience</h3>
+          <p>Help other drivers by adding new stops and leaving reviews.</p>
+          <router-link to="/truck-stops" class="feature-link">Add Stop</router-link>
         </div>
       </div>
-      <p>Welcome to your TruckAPI dashboard. This is where you can manage your trucking operations.</p>
     </main>
   </div>
 </template>
@@ -45,6 +53,25 @@ const handleLogout = () => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #4CAF50;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background-color: #e8f5e9;
+}
+
 .logout-button {
   padding: 0.5rem 1rem;
   background-color: #dc3545;
@@ -65,31 +92,42 @@ const handleLogout = () => {
   margin: 0 auto;
 }
 
-.token-section {
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
   margin-top: 2rem;
-  padding: 1.5rem;
-  background-color: white;
+}
+
+.feature-card {
+  background: white;
+  padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.token-section h3 {
-  margin-bottom: 1rem;
+.feature-card h3 {
   color: #333;
+  margin-bottom: 1rem;
 }
 
-.token-display {
-  padding: 1rem;
-  background-color: #f8f9fa;
+.feature-card p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.feature-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
   border-radius: 4px;
-  border: 1px solid #dee2e6;
-  overflow-x: auto;
+  transition: background-color 0.2s;
 }
 
-.token-display code {
-  font-family: Monaco, "Courier New", monospace;
-  font-size: 0.9rem;
-  color: #495057;
-  word-break: break-all;
+.feature-link:hover {
+  background-color: #45a049;
 }
 </style>

@@ -3,6 +3,7 @@ import { useAuthStore } from '../stores/auth'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
+import TruckStopsView from '../views/TruckStopsView.vue'
 
 const router = createRouter({
   history: createWebHistory('/'),
@@ -22,6 +23,12 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/truck-stops',
+      name: 'truck-stops',
+      component: TruckStopsView,
+      meta: { title: 'Truck Stops Map' }
     }
   ]
 })

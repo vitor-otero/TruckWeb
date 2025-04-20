@@ -11,8 +11,20 @@ interface User {
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User | null>(JSON.parse(localStorage.getItem('user') || 'null'));
-  const token = ref<string | null>(localStorage.getItem('token'));
+  const user = ref<User | null>(null);
+  const token = ref<string | null>(null);
+  
+  // Initialize from localStorage if available
+  try {
+    const savedUser = localStorage.getItem('user');
+    const savedToken = localStorage.getItem('token');
+    if (savedUser && savedToken) {
+      user.value = JSON.parse(savedUser);
+      token.value = savedToken;
+    }
+  } catch (e) {
+    console.error('Error loading auth state:', e);
+  }
 
   const isAuthenticated = computed(() => !!token.value && !!user.value);
   const currentUser = computed(() => user.value);
@@ -20,10 +32,16 @@ export const useAuthStore = defineStore('auth', () => {
   async function login(email: string, password: string) {
     try {
       const response = await api.post('/api/users/login', { email, password });
+      // Set state first
       user.value = response.data.user;
       token.value = response.data.token;
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      localStorage.setItem('token', response.data.token);
+      // Then try to persist to localStorage
+      try {
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('token', response.data.token);
+      } catch (e) {
+        console.warn('Could not save auth state to localStorage:', e);
+      }
       return true;
     } catch (error) {
       console.error('Login failed:', error);
@@ -42,10 +60,16 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout() {
+    // Clear state first
     user.value = null;
     token.value = null;
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    // Then try to clear localStorage
+    try {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+    } catch (e) {
+      console.warn('Could not clear auth state from localStorage:', e);
+    }
   }
 
   return {
